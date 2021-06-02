@@ -48,6 +48,11 @@ namespace WpfApp3
                         case "6000":
                             wnd = new WindowSupply(e.Args[2]);
                             break;
+
+                        // GANTT
+                        case "7000":
+                            wnd = new WindowGantt(e.Args[2]);
+                            break;
                     }
                     if (wnd != null)
                     {
@@ -61,7 +66,7 @@ namespace WpfApp3
             }
             if (wnd == null)
             {
-                wnd = new WindowSupply("MP20210415");
+                wnd = new WindowGanttSchedule("MP20210415");
                 wnd.WindowState = WindowState.Maximized;
                 wnd.WindowStyle = WindowStyle.SingleBorderWindow;
             }
