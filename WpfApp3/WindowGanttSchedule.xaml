@@ -12,30 +12,40 @@
                             xmlns:dxsch="http://schemas.devexpress.com/winfx/2008/xaml/scheduler"
                             xmlns:collections="clr-namespace:System.Collections;assembly=mscorlib"
                             xmlns:local="clr-namespace:WpfApp3"
+                            xmlns:mv="clr-namespace:WpfApp3"
                             mc:Ignorable="d"
                             d:DesignWidth="800"
                             d:DesignHeight="600"
-                            DataContext="{dxmvvm:ViewModelSource Type={x:Type  local:WindowGanttScheduleViewModel}}">
+                            d:DataContext="WindowGanttScheduleViewModel"
+                            >
+    <local:BaseWindow.DataContext>
+        <mv:WindowGanttScheduleViewModel x:Name="gsvm"/>
+    </local:BaseWindow.DataContext>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <dxsch:SchedulerControl Name="schedulerControl1" Grid.Column="1" 
+
+        <dxsch:SchedulerControl Name="schedulerControl1" Grid.ColumnSpan="3" 
                                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
-                                ActiveViewType="Timeline">
-            <dxsch:SchedulerControl.DataContext>
-                <Binding Source=""></Binding>
-            </dxsch:SchedulerControl.DataContext>
+                                ActiveViewType="Timeline" GroupType="Resource">
+
             <!--region #TimelineView-->
             <dxsch:SchedulerControl.TimelineView>
-                <dxsch:TimelineView IntervalCount="240" 
-                                TimelineScrollBarVisible="False">
+                <dxsch:TimelineView IntervalCount="720" 
+                                TimelineScrollBarVisible="True">
                     <dxsch:TimelineView.Scales>
                         <dxschcore:TimeScaleCollection>
                             <dxschcore:TimeScaleMonth />
                             <dxschcore:TimeScaleWeek />
-                            <dxschcore:TimeScaleDay DisplayFormat="ddd dd"/>
+                            <dxschcore:TimeScaleDay DisplayFormat="ddd dd" />
+                            <local:CustomTimeScale />
                         </dxschcore:TimeScaleCollection>
                     </dxsch:TimelineView.Scales>
                     <dxsch:TimelineView.AppointmentDisplayOptions>
@@ -44,12 +54,13 @@
                                 StartTimeVisibility="Auto"  
                                 EndTimeVisibility="Auto" />
                     </dxsch:TimelineView.AppointmentDisplayOptions>
+
                 </dxsch:TimelineView>
             </dxsch:SchedulerControl.TimelineView>
             <!--endregion #TimelineView-->
 
         </dxsch:SchedulerControl>
-        
-        
+
+
     </Grid>
 </local:BaseWindow>

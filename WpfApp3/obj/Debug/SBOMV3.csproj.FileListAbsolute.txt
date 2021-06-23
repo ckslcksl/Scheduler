@@ -1249,7 +1249,6 @@ C:\Users\82108\Desktop\SBOMV3_1 - 복사본\SBOMV3\WpfApp3\bin\Debug\Newtonsoft.
 C:\Users\82108\Desktop\SBOMV3_1 - 복사본\SBOMV3\WpfApp3\bin\Debug\Microsoft.Azure.Management.ResourceManager.Fluent.xml
 C:\Users\82108\Desktop\SBOMV3_1 - 복사본\SBOMV3\WpfApp3\bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.xml
 C:\Users\82108\Desktop\SBOMV3_1 - 복사본\SBOMV3\WpfApp3\bin\Debug\Microsoft.IdentityModel.Tokens.xml
-C:\Users\82108\Desktop\SBOMV3_1 - 복사본\SBOMV3\WpfApp3\bin\Debug\Microsoft.Rest.ClientRuntime.xml
 C:\Users\82108\Desktop\SBOMV3_1 - 복사본\SBOMV3\WpfApp3\bin\Debug\Microsoft.Rest.ClientRuntime.Azure.xml
 C:\Users\82108\Desktop\SBOMV3_1 - 복사본\SBOMV3\WpfApp3\bin\Debug\Microsoft.Rest.ClientRuntime.Azure.Authentication.xml
 C:\Users\82108\Desktop\SBOMV3_1 - 복사본\SBOMV3\WpfApp3\bin\Debug\Newtonsoft.Json.xml
@@ -1287,4 +1286,8 @@ C:\Users\82108\Desktop\SBOMV3_1 - 복사본\SBOMV3\WpfApp3\bin\Debug\de\DevExpre
 C:\Users\82108\Desktop\SBOMV3_1 - 복사본\SBOMV3\WpfApp3\bin\Debug\es\DevExpress.Xpf.Scheduler.v20.2.resources.dll
 C:\Users\82108\Desktop\SBOMV3_1 - 복사본\SBOMV3\WpfApp3\bin\Debug\ja\DevExpress.Xpf.Scheduler.v20.2.resources.dll
 C:\Users\82108\Desktop\SBOMV3_1 - 복사본\SBOMV3\WpfApp3\bin\Debug\ru\DevExpress.Xpf.Scheduler.v20.2.resources.dll
-C:\Users\82108\Desktop\SBOMV3_1 - 복사본\SBOMV3\WpfApp3\obj\Debug\SBOMV3.csprojAssemblyReference.cache
+C:\Users\82108\Desktop\SBOMV3_1 - 복사본\SBOMV3\WpfApp3\bin\Debug\EntityFramework.dll
+C:\Users\82108\Desktop\SBOMV3_1 - 복사본\SBOMV3\WpfApp3\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\82108\Desktop\SBOMV3_1 - 복사본\SBOMV3\WpfApp3\bin\Debug\EntityFramework.xml
+C:\Users\82108\Desktop\SBOMV3_1 - 복사본\SBOMV3\WpfApp3\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\82108\Desktop\SBOMV3_1 - 복사본\SBOMV3\WpfApp3\bin\Debug\Microsoft.IdentityModel.Logging.xml

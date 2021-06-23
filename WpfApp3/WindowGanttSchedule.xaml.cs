@@ -25,14 +25,12 @@ namespace WpfApp3
         public WindowGanttSchedule(string versionNm)
         {
             InitializeComponent();
-            MyCustomScale myScale = new MyCustomScale();
-            schedulerControl1.TimelineView.Scales.Add(myScale);
-            ///schedulerControl1.TimelineView.Scales.Last().Width = 3;
             TimeScaleFixedInterval scale1Minutes = new TimeScaleFixedInterval(TimeSpan.FromMinutes(1));
             schedulerControl1.TimelineView.Scales.Add(scale1Minutes);
-            schedulerControl1.TimelineView.Scales.GetById(scale1Minutes).Width = 1;
+
         }
     }
+    
     public class MyCustomScale : TimeScaleHour
     {
         public MyCustomScale() { }
@@ -48,9 +46,19 @@ namespace WpfApp3
         public override bool IsDateVisible(DateTime date)
         {
             if (date.Hour >= 8 && date.Hour <= 18)
-                return !(date.Hour == 14);
+                return true;
             else return false;
         }
     }
-
+    #region #CustomTimeScale
+    public class CustomTimeScale : TimeScaleFixedInterval
+    {
+        // Fields
+        private const bool defaultEnabled = true;
+        // Methods
+        public CustomTimeScale() : base(TimeSpan.FromMinutes(1)) { Width = 1; }
+        protected override string DefaultDisplayName { get { return "Custom Scale"; } }
+        protected override string DefaultMenuCaption { get { return "Custom Scale"; } }
+    }
+    #endregion #CustomTimeScale
 }
