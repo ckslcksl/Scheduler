@@ -2070,54 +2070,6 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DlhSoft.HierarchicalData.LightWPF.Controls.dll" size="101888">
-      <assemblyIdentity name="DlhSoft.HierarchicalData.LightWPF.Controls" version="4.0.10.3" publicKeyToken="6071B28DA0134838" language="neutral" processorArchitecture="msil" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>os5hiHRwhMB6gHcTsr/79tBu0OfVPF0qg064nGGivak=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DlhSoft.OrganizationalChartLibrary.Controls.dll" size="87552">
-      <assemblyIdentity name="DlhSoft.OrganizationalChartLibrary.Controls" version="4.0.8.5" publicKeyToken="6071B28DA0134838" language="neutral" processorArchitecture="msil" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>NSsDCvOk2CyMUJPZCx1mx/kDzj5cLxRgeFuIsHrc2PA=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DlhSoft.ProjectData.GanttChart.LightWPF.Controls.dll" size="723968">
-      <assemblyIdentity name="DlhSoft.ProjectData.GanttChart.LightWPF.Controls" version="4.3.45.5" publicKeyToken="6071B28DA0134838" language="neutral" processorArchitecture="msil" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>fYVQy1755ebr9GV3dExYsSBOI3srp9dsJ2g5E82yUIw=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DlhSoft.ProjectData.PertChart.LightWPF.Controls.dll" size="299008">
-      <assemblyIdentity name="DlhSoft.ProjectData.PertChart.LightWPF.Controls" version="4.3.45.3" publicKeyToken="6071B28DA0134838" language="neutral" processorArchitecture="msil" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>FaFhcX5OP2axmM1W8ossB2rI5iJ7HF1g27ldWDnH2SQ=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="EntityFramework.dll" size="4991352">
       <assemblyIdentity name="EntityFramework" version="6.0.0.0" publicKeyToken="B77A5C561934E089" language="neutral" processorArchitecture="msil" />
       <hash>
@@ -2282,42 +2234,6 @@
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
         <dsig:DigestValue>tiSUnfiw46YVP9+3MKfG9JkLZZLuDZIuF4hDPSdmEPM=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Prism.dll" size="91232">
-      <assemblyIdentity name="Prism" version="8.1.97.5141" publicKeyToken="40EE6C3A2184DC59" language="neutral" processorArchitecture="msil" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>CKuUcBpVeBpwn4z/41MydjW+5rS3VByyl5vz9PS2Ezg=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Prism.Unity.Wpf.dll" size="28256">
-      <assemblyIdentity name="Prism.Unity.Wpf" version="8.1.97.5141" publicKeyToken="40EE6C3A2184DC59" language="neutral" processorArchitecture="msil" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>y4IkXtJW/8yEF1aZ3ZqQHik/1XDQRESfeAz+L4Yv/N4=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Prism.Wpf.dll" size="134752">
-      <assemblyIdentity name="Prism.Wpf" version="8.1.97.5141" publicKeyToken="40EE6C3A2184DC59" language="neutral" processorArchitecture="msil" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>u1URrmEvIraLntym6SyZx7VK19lwwLiYZf3UUPb5Pmw=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -3558,14 +3474,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WpfApp3.exe" size="205784">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WpfApp3.exe" size="68056">
       <assemblyIdentity name="WpfApp3" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>bVLIzVp2a+8d01AffCGPLiKJO93UZ06GOPeKUqrPNUQ=</dsig:DigestValue>
+        <dsig:DigestValue>Wpr1iKq7eqpYc4Bt/Z9YfC0qliXct/385e9fwiWeZ6Q=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

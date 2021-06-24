@@ -1,124 +1,286 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Input;
-using DevExpress.Xpf.Core.Commands;
+﻿using DevExpress.Mvvm;
+using DevExpress.XtraScheduler;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
+using System.Globalization;
+using System.Linq;
 using WpfApp3.Model;
+using WpfApp3.Util;
+using System.Data.SqlClient;
+
 
 namespace WpfApp3
 {
-    public class WindowGanttScheduleViewModel
+    class WindowGanttScheduleViewModel : ViewModelBase
     {
-        public ObservableCollection<ModelAppointment> Appointments { get; private set; }
-        public ObservableCollection<ModelResource> Resources { get; private set; }
+        static string connectionString = @"Server=165.243.45.197,1433; Database=lscnssm; uid=hscmuser; pwd=hscm!q2w3e4r;";
+        SqlConnection con;
+        SqlCommand cmd;
+        SqlDataAdapter adapter;
+        DataSet ds;
 
-        public ICommand AddNewAppointmentCommand { get; private set; }
-        public ICommand GetSourceObjectCommand { get; private set; }
+        public DelegateCommand ChangeVersionDateCommand { get; private set; }
+        public DelegateCommand ChangeVersionModelsCommand { get; private set; }
+
+        public virtual DateTime Start { get; set; }
+        ///public IEnumerable<WorkCalendar> Calendars { get { return WorkData.Calendars; } }
+        ///public IEnumerable<WorkAppointment> Appointments { get { return WorkData.Appointments; } }
+        ///
+
+        public VersionModel SelectedVersionDate
+        {
+            get { return GetValue<VersionModel>(nameof(SelectedVersionDate)); }
+            set { SetValue(value, nameof(SelectedVersionDate)); }
+        }
+        public IEnumerable<VersionModel> VersionDate
+        {
+            get { return GetValue<IEnumerable<VersionModel>>(nameof(VersionDate)); }
+            set { SetValue(value, nameof(VersionDate)); }
+        }
+
+        public VersionModel SelectedVersion
+        {
+            get { return GetValue<VersionModel>(nameof(SelectedVersion)); }
+            set { SetValue(value, nameof(SelectedVersion)); }
+        } 
+
+        public IEnumerable<VersionModel> VersionModels
+        {
+            get { return GetValue<IEnumerable<VersionModel>>(nameof(VersionModels)); }
+            set { SetValue(value, nameof(VersionModels)); }
+        }
+        /// Appointments
+        public IEnumerable<ModelAppointment> ModelAppointments
+        {
+            get { return GetValue<IEnumerable<ModelAppointment>>(nameof(ModelAppointments)); }
+            set { SetValue(value,nameof(ModelAppointments)); }
+        }
+        /// Resources 
+        public IEnumerable<ModelResource> ModelResources
+        {
+            get { return GetValue<IEnumerable<ModelResource>>(nameof(ModelResources)); }
+            set { SetValue(value, nameof(ModelResources)); }
+        }
+
+        void ChangeVersionDateExecute()
+        {
+            GenVersions();
+        }
+        void ChangeVersionModelsExecute()
+        {
+            GenSchedule();
+        }
 
         public WindowGanttScheduleViewModel()
-        {
-            Appointments = new ObservableCollection<ModelAppointment>();
-            Resources = new ObservableCollection<ModelResource>();
+        {           
+            Start = DateTime.Today.Date;
 
-            AddNewAppointmentCommand = new DevExpress.Mvvm.DelegateCommand<object>(AddNewAppointmentCommandExecute);
-            GetSourceObjectCommand = new DevExpress.Mvvm.DelegateCommand<object>(GetSourceObjectCommandExecute);
+            ChangeVersionDateCommand = new DelegateCommand(ChangeVersionDateExecute);
+            ChangeVersionModelsCommand = new DelegateCommand(ChangeVersionModelsExecute);
 
-            AddTestData();
+            GenVersionDates();
         }
-
-        private void AddNewAppointmentCommandExecute(object parameter)
+        private void GenVersionDates()
         {
-            DateTime baseTime = DateTime.Today;
+            List<VersionModel> versionDates = new List<VersionModel>();
+            con = new SqlConnection(connectionString);
+            cmd = new SqlCommand();
+            cmd.Connection = con;
+            con.Open();
+            cmd.CommandText = @"SELECT [PLAN_STARTDATE]
+                                FROM [lscnssm].[dbo].[MPI_VERSION]
+                                GROUP BY PLAN_STARTDATE
+                                ORDER BY PLAN_STARTDATE DESC";
 
-            ModelAppointment apt = new ModelAppointment()
+            SqlDataReader sdr = cmd.ExecuteReader();
+
+            while (sdr.Read())
             {
-                StartTime = baseTime.AddHours(3),
-                EndTime = baseTime.AddHours(4),
-                Subject = "Test3",
-                Location = "Office",
-                Description = "Test procedure",
-                Price = 20m
-            };
-
-            Appointments.Add(apt);
-        }
-
-        private void GetSourceObjectCommandExecute(object parameter)
-        {
-            DevExpress.Xpf.Scheduler.SchedulerStorage storage = (DevExpress.Xpf.Scheduler.SchedulerStorage)parameter;
-
-            if (storage.AppointmentStorage.Count > 0)
-            {
-                ModelAppointment apt = (ModelAppointment)storage.AppointmentStorage[0].GetSourceObject(storage.GetCoreStorage());
-                // Alternative: ModelAppointment apt = (ModelAppointment)storage.GetObjectRow(storage.AppointmentStorage[0]);
-                MessageBox.Show("First Appointment Price: " + apt.Price.ToString());
+                VersionModel vm = new VersionModel()
+                {
+                    PlanStartDate = sdr["PLAN_STARTDATE"].ToString()
+                };
+                versionDates.Add(vm);
             }
+
+            VersionDate = versionDates;
         }
-
-        private void AddTestData()
+        private void GenVersions()
         {
-            ModelResource res1 = new ModelResource()
+            
+            string sDate = SelectedVersionDate.PlanStartDate;
+            List<VersionModel> versions = new List<VersionModel>();
+            con = new SqlConnection(connectionString);
+            cmd = new SqlCommand();
+            cmd.Connection = con;
+            con.Open();
+            cmd.CommandText = @"SELECT [VERSION]
+                                  ,[VERSION_DESCR]
+                                  ,[PLAN_STARTDATE]
+                                  ,[PLAN_TYPE]
+                              FROM [lscnssm].[dbo].[MPI_VERSION]
+                              WHERE PLAN_STARTDATE = '"+ sDate +@"'
+                              ORDER BY VERSION ASC";
+
+            adapter = new SqlDataAdapter(cmd.CommandText, con);
+            ds = new DataSet();
+            adapter.Fill(ds);
+
+            DataTable dt = ds.Tables[0];
+            dt.DefaultView.Sort = "VERSION";
+            foreach (DataRow dr in dt.DefaultView.ToTable().Rows)
             {
-                Id = 0,
-                Name = "Resource1",
-                Color = ToRgb(System.Drawing.Color.LightGray)
-            };
+                VersionModel vm = new VersionModel()
+                {
+                    Version = dr["VERSION"].ToString(),
+                    VersionDescr = dr["VERSION_DESCR"].ToString(),
+                    PlanStartDate = dr["PLAN_STARTDATE"].ToString(),
+                    PlanType = dr["PLAN_TYPE"].ToString()
+                };
+                versions.Add(vm);
+            }
 
-            ModelResource res2 = new ModelResource()
-            {
-                Id = 1,
-                Name = "Resource2",
-                Color = ToRgb(System.Drawing.Color.White)
-            };
+            VersionModels = versions;
 
-            ModelResource res3 = new ModelResource()
-            {
-                Id = 2,
-                Name = "Resource3",
-                Color = ToRgb(System.Drawing.Color.LightGray)
-            };
-
-            ModelResource res4 = new ModelResource()
-            {
-                Id = 3,
-                Name = "Resource4",
-                Color = ToRgb(System.Drawing.Color.White)
-            };
-
-            Resources.Add(res1);
-            Resources.Add(res2);
-            Resources.Add(res3);
-            Resources.Add(res4);
-
-            DateTime baseTime = DateTime.Today;
-
-            ModelAppointment apt1 = new ModelAppointment()
-            {
-                StartTime = baseTime.AddHours(1),
-                EndTime = baseTime.AddHours(2),
-                Subject = "Test",
-                Location = "Office",
-                Description = "Test procedure",
-                Price = 10m
-            };
-
-            ModelAppointment apt2 = new ModelAppointment()
-            {
-                StartTime = baseTime.AddHours(2),
-                EndTime = baseTime.AddHours(3),
-                Subject = "Test2",
-                Location = "Office",
-                Description = "Test procedure",
-                ResourceId = "<ResourceIds>\r\n<ResourceId Type=\"System.Int32\" Value=\"0\" />\r\n<ResourceId Type=\"System.Int32\" Value=\"1\" />\r\n</ResourceIds>"
-            };
-
-            Appointments.Add(apt1);
-            Appointments.Add(apt2);
         }
-
-        private int ToRgb(System.Drawing.Color color)
+        private void GenSchedule()
         {
-            return color.B << 16 | color.G << 8 | color.R;
+            try
+            {
+                object se = SelectedVersion.Version;
+                var sv = SelectedVersion.Version;
+                con = new SqlConnection(connectionString);
+                cmd = new SqlCommand();
+                cmd.Connection = con;
+                con.Open();
+                cmd.CommandText = @"
+                                SELECT [VERSION]
+                                      ,[SEQ_NO]
+                                      ,[PLANT]
+                                      ,[WC]
+                                      ,[EQUIPMENT]
+                                      ,[EQUIPMENT_DESCR]
+                                      ,[EQUIPMENT_TYPE]
+                                      ,[EQUIPMENT_GROUP]
+                                      ,[SORT_NO]
+                                      ,[UTILIZATION]
+                                      ,[GANTT_DISPLAY_FLAG]
+                                      ,[CREATED_BY]
+                                      ,[CREATED_AT]
+                                      ,[RES_CAPA_VALUE]
+                                      ,[TT_INNER_DIAMETER]
+                                      ,[TT_FULL_DIAMETER]
+                                      ,[TT_HEIGHT]
+                                  FROM [lscnssm].[dbo].[MPI_INPUT_EQUIPMENT] as ie
+                                  where version = '" + sv + @"';
+                                 SELECT  [VERSION]
+                                    ,[PLANT]
+                                    ,[WC]
+                                    ,[EQUIPMENT]
+                                    ,[LOT]
+                                    ,[PRODUCT]
+                                    ,[DEMAND_ID]
+                                    ,[PLAN_QTY]
+                                    ,[OPERATION]
+                                    ,[START_TIME]
+                                    ,[END_TIME]
+                                    ,[EVENT]
+							   FROM
+							   (
+							   SELECT [VERSION]
+                                    ,[PLANT]
+                                    ,[WC]
+                                    ,[EQUIPMENT]
+                                    ,[LOT]
+                                    ,[PRODUCT]
+                                    ,[DEMAND_ID]
+                                    ,[PLAN_QTY]
+                                    ,[OPERATION]
+                                    ,[START_TIME]
+                                    ,[END_TIME]
+                                    ,[EVENT]
+                                FROM [lscnssm].[dbo].[MPO_CONST_EQUIP_SCHEDULE]
+								UNION
+								 SELECT [VERSION]
+                                    ,[PLANT]
+                                    ,[WC]
+                                    ,[EQUIPMENT]
+                                    ,[LOT]
+                                    ,[PRODUCT]
+                                    ,[DEMAND_ID]
+                                    ,[PLAN_QTY]
+                                    ,[OPERATION]
+                                    ,[START_TIME]
+                                    ,[END_TIME]
+                                    ,[EVENT]
+                                FROM [lscnssm].[dbo].[MPO_EQUIP_SCHEDULE]
+								) AS ap
+                                WHERE ap.VERSION = '"+ sv + "';";
+
+                adapter = new SqlDataAdapter(cmd.CommandText, con);
+                ds = new DataSet();
+                adapter.Fill(ds);
+
+                DataTable dt = ds.Tables[0];
+                DataTable dt1 = ds.Tables[1];
+
+                con.Close();
+
+                List<ModelAppointment> appointments = new List<ModelAppointment>();
+                List<ModelResource> resources = new List<ModelResource>();
+
+                dt.DefaultView.Sort = "EQUIPMENT";
+
+                foreach (DataRow dr in dt.DefaultView.ToTable().Rows)
+                {
+                    ModelResource mr = new ModelResource()
+                    {
+                        Id = dr["EQUIPMENT"].ToString(),
+                        Name = dr["EQUIPMENT_DESCR"].ToString(),
+                        IsVisible = true,
+                        Group = dr["PLANT"].ToString(),
+                        Tag = dr["VERSION"].ToString()
+                    };
+                    resources.Add(mr);
+                }
+
+
+                dt1.DefaultView.Sort = "DEMAND_ID";
+                int cnt1 = 1;
+                var vc1 = "";
+
+                foreach (DataRow dr in dt1.DefaultView.ToTable().Rows)
+                {
+                    if (!vc1.Equals(dr["DEMAND_ID"].ToString()))
+                    {
+                        cnt1++;
+                    }
+                    if (cnt1 > 24) { cnt1 = 1; }
+                    ModelAppointment ma = new ModelAppointment()
+                    {
+                        Id = dr["EQUIPMENT"].ToString(),
+                        AppointmentType = (int)AppointmentType.Normal,
+                        AllDay = false,
+                        Start = Convert.ToDateTime(dr["START_TIME"].ToString()),
+                        End = Convert.ToDateTime(dr["END_TIME"].ToString()).AddSeconds(-1),
+                        Subject = dr["DEMAND_ID"].ToString(),
+                        Description = dr["PRODUCT"].ToString(),
+                        CalendarId = dr["EQUIPMENT"].ToString(),
+                        Label = cnt1.ToString()
+                    };
+                    vc1 = dr["DEMAND_ID"].ToString();
+                    appointments.Add(ma);
+                }
+                ModelAppointments = appointments;
+                ModelResources = resources;
+            } 
+            catch (NullReferenceException e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+           
         }
     }
 }

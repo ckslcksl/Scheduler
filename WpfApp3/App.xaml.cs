@@ -39,19 +39,9 @@ namespace WpfApp3
                 {
                     switch (e.Args[1])
                     {
-                        // SBOM
-                        case "5000":
-                            wnd = new WindowSBOM(e.Args[2]);
-                            break;
-
-                        // SUPPLY
-                        case "6000":
-                            wnd = new WindowSupply(e.Args[2]);
-                            break;
-
                         // GANTT
-                        case "7000":
-                            wnd = new WindowGantt(e.Args[2]);
+                        case "8000":
+                            wnd = new WindowGanttSchedule(e.Args[2]);
                             break;
                     }
                     if (wnd != null)

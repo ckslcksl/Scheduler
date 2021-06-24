@@ -2,18 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using DevExpress.Xpf.Core;
+using DevExpress.Xpf.Diagram;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using WpfApp3.Model;
 
-using DevExpress.XtraScheduler;
+using DevExpress.Mvvm.UI.Interactivity;
+using DevExpress.Xpf.Diagram.Themes;
 
 namespace WpfApp3
 {
@@ -25,40 +20,29 @@ namespace WpfApp3
         public WindowGanttSchedule(string versionNm)
         {
             InitializeComponent();
-            TimeScaleFixedInterval scale1Minutes = new TimeScaleFixedInterval(TimeSpan.FromMinutes(1));
-            schedulerControl1.TimelineView.Scales.Add(scale1Minutes);
+            for (int i = 1; i < 12; i++)
+            {
+                this.timelineView.ZoomOut();
+            }
 
+        }
+
+        private void scheduler_CompleteAppointmentDragDrop(object sender, DevExpress.Xpf.Scheduling.CompleteAppointmentDragDropEventArgs e)
+        {
+            Console.WriteLine(e);
+        }
+
+        private void scheduler_DropAppointment(object sender, DevExpress.Xpf.Scheduling.DropAppointmentEventArgs e)
+        {
+            Console.WriteLine(e);
+            System.Collections.Generic.IReadOnlyList<DevExpress.Xpf.Scheduling.AppointmentItem> aaa = e.DragAppointments;
+            // DevExpress.Xpf.Scheduling.SchedulerControl bbb = e.OriginalSource;
+            object res = aaa[0].ResourceId;
+            Console.WriteLine(res);
+            return;
         }
     }
     
-    public class MyCustomScale : TimeScaleHour
-    {
-        public MyCustomScale() { }
 
-        public override string DisplayName { get => "Custom Work Hours"; set => base.DisplayName = value; }
-        public override string MenuCaption { get => "Custom Work Hours"; set => base.MenuCaption = value; }
 
-        public override string FormatCaption(DateTime start, DateTime end)
-        {
-            if (start.Hour <= 12) return start.Hour.ToString() + " AM";
-            else return (start.Hour - 12).ToString() + " PM";
-        }
-        public override bool IsDateVisible(DateTime date)
-        {
-            if (date.Hour >= 8 && date.Hour <= 18)
-                return true;
-            else return false;
-        }
-    }
-    #region #CustomTimeScale
-    public class CustomTimeScale : TimeScaleFixedInterval
-    {
-        // Fields
-        private const bool defaultEnabled = true;
-        // Methods
-        public CustomTimeScale() : base(TimeSpan.FromMinutes(1)) { Width = 1; }
-        protected override string DefaultDisplayName { get { return "Custom Scale"; } }
-        protected override string DefaultMenuCaption { get { return "Custom Scale"; } }
-    }
-    #endregion #CustomTimeScale
 }

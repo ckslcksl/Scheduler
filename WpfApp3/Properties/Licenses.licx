@@ -8,3 +8,4 @@ DevExpress.Xpf.Charts.ChartControl, DevExpress.Xpf.Charts.v20.2, Version=20.2.3.
 DevExpress.Xpf.Diagram.DiagramControl, DevExpress.Xpf.Diagram.v20.2, Version=20.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a
 DevExpress.Xpf.LayoutControl.DockLayoutControl, DevExpress.Xpf.LayoutControl.v20.2, Version=20.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a
 DevExpress.Xpf.Scheduling.SchedulerControl, DevExpress.Xpf.Scheduling.v20.2, Version=20.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a
+DevExpress.Xpf.Editors.ListBoxEdit, DevExpress.Xpf.Core.v20.2, Version=20.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a
