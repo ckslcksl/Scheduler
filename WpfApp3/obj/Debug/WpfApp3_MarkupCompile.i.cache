@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\82108\Desktop\Scheduler\SBOMV3\WpfApp3\obj\Debug\
+C:\Users\82108\Desktop\Scheduler\Scheduler\WpfApp3\obj\Debug\
 WpfApp3
 none
 false
 DEBUG;TRACE
-C:\Users\82108\Desktop\Scheduler\SBOMV3\WpfApp3\App.xaml
+C:\Users\82108\Desktop\Scheduler\Scheduler\WpfApp3\App.xaml
 1-13342184
 8-1011071942
 11-616996528
-1951075829230
+195885640925
 WindowGanttSchedule.xaml;
 
-False
+True
 

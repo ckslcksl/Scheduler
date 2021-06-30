@@ -9,7 +9,7 @@ using System.Linq;
 using WpfApp3.Model;
 using WpfApp3.Util;
 using System.Data.SqlClient;
-
+using System.Windows.Forms;
 
 namespace WpfApp3
 {
@@ -21,8 +21,11 @@ namespace WpfApp3
         SqlDataAdapter adapter;
         DataSet ds;
 
+        public DelegateCommand ConnectDataBaseCommand { get; private set; }
+        public DelegateCommand ConnectCsvCommand { get; private set; }
         public DelegateCommand ChangeVersionDateCommand { get; private set; }
         public DelegateCommand ChangeVersionModelsCommand { get; private set; }
+        public DelegateCommand SelectSameLotsCommand { get; private set; }
 
         public virtual DateTime Start { get; set; }
         ///public IEnumerable<WorkCalendar> Calendars { get { return WorkData.Calendars; } }
@@ -64,6 +67,30 @@ namespace WpfApp3
             set { SetValue(value, nameof(ModelResources)); }
         }
 
+        /// Selected Appointments
+        public IEnumerable<ModelAppointment>SelectedAppointments
+        {
+            get { return GetValue<IEnumerable<ModelAppointment>>(nameof(SelectedAppointments)); }
+            set { SetValue(value, nameof(SelectedAppointments)); }
+        }
+
+        public ModelAppointment SelectedAppointment
+        {
+            get { return GetValue<ModelAppointment>(nameof(SelectedAppointment)); }
+            set { SetValue(value, nameof(SelectedAppointment)); }
+        }
+
+
+        void ConnectDataBaseExecute()
+        {
+            GenVersionDates();
+        }
+        void ConnectCsvExecute()
+        {
+            GenResourceByCsv();
+            GenAppointmentsByCsv();
+        }
+
         void ChangeVersionDateExecute()
         {
             GenVersions();
@@ -72,40 +99,50 @@ namespace WpfApp3
         {
             GenSchedule();
         }
-
+        void SelectSameLotsExecute()
+        {
+            GenSelectedAppointments();
+        }
         public WindowGanttScheduleViewModel()
         {           
             Start = DateTime.Today.Date;
-
+            ConnectDataBaseCommand = new DelegateCommand(ConnectDataBaseExecute);
+            ConnectCsvCommand = new DelegateCommand(ConnectCsvExecute);
             ChangeVersionDateCommand = new DelegateCommand(ChangeVersionDateExecute);
             ChangeVersionModelsCommand = new DelegateCommand(ChangeVersionModelsExecute);
+            SelectSameLotsCommand = new DelegateCommand(SelectSameLotsExecute);
 
-            GenVersionDates();
         }
         private void GenVersionDates()
         {
-            List<VersionModel> versionDates = new List<VersionModel>();
-            con = new SqlConnection(connectionString);
-            cmd = new SqlCommand();
-            cmd.Connection = con;
-            con.Open();
-            cmd.CommandText = @"SELECT [PLAN_STARTDATE]
+            try
+            {
+                List<VersionModel> versionDates = new List<VersionModel>();
+                con = new SqlConnection(connectionString);
+                cmd = new SqlCommand();
+                cmd.Connection = con;
+                con.Open();
+                cmd.CommandText = @"SELECT [PLAN_STARTDATE]
                                 FROM [lscnssm].[dbo].[MPI_VERSION]
                                 GROUP BY PLAN_STARTDATE
                                 ORDER BY PLAN_STARTDATE DESC";
 
-            SqlDataReader sdr = cmd.ExecuteReader();
+                SqlDataReader sdr = cmd.ExecuteReader();
 
-            while (sdr.Read())
-            {
-                VersionModel vm = new VersionModel()
+                while (sdr.Read())
                 {
-                    PlanStartDate = sdr["PLAN_STARTDATE"].ToString()
-                };
-                versionDates.Add(vm);
-            }
+                    VersionModel vm = new VersionModel()
+                    {
+                        PlanStartDate = sdr["PLAN_STARTDATE"].ToString()
+                    };
+                    versionDates.Add(vm);
+                }
 
-            VersionDate = versionDates;
+                VersionDate = versionDates;
+            }catch(SqlException e)
+            {
+                MessageBox.Show(e.Message,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
         }
         private void GenVersions()
         {
@@ -281,6 +318,104 @@ namespace WpfApp3
                 Console.WriteLine(e.StackTrace);
             }
            
+        }
+        private void GenResourceByCsv()
+        {
+            try { 
+                List<ModelResource> resources = new List<ModelResource>();
+                DataTable dtr = MpInputCSVUtil.ConvertCSVtoDataTable(@"D:\LS\resource_0601.csv");
+                dtr.DefaultView.Sort = "EQUIPMENT";
+
+                foreach (DataRow dr in dtr.DefaultView.ToTable().Rows)
+                {
+                    ModelResource mr = new ModelResource()
+                    {
+                        Id = dr["EQUIPMENT"].ToString(),
+                        Name = dr["EQUIPMENT_DESCR"].ToString(),
+                        IsVisible = true,
+                        Group = dr["PLANT"].ToString(),
+                        Tag = dr["VERSION"].ToString()
+                    };
+                    resources.Add(mr);
+                }
+                ModelResources = resources;
+            }
+            catch (ArgumentException e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+        }
+        private void GenAppointmentsByCsv()
+        {
+            try
+            {
+                var path = ShowFileOpenDialog();
+                List<ModelAppointment> appointments = new List<ModelAppointment>();
+                DataTable dta = MpInputCSVUtil.ConvertCSVtoDataTable(path);
+                dta.DefaultView.Sort = "DEMAND_ID";
+                int cnt1 = 1;
+                var vc1 = "";
+
+                foreach (DataRow dr in dta.DefaultView.ToTable().Rows)
+                {
+                    if (!vc1.Equals(dr["DEMAND_ID"].ToString()))
+                    {
+                        cnt1++;
+                    }
+                    if (cnt1 > 24) { cnt1 = 1; }
+                    ModelAppointment ma = new ModelAppointment()
+                    {
+                        Id = dr["EQUIPMENT"].ToString(),
+                        AppointmentType = (int)AppointmentType.Normal,
+                        AllDay = false,
+                        Start = Convert.ToDateTime(dr["START_TIME"].ToString()),
+                        End = Convert.ToDateTime(dr["END_TIME"].ToString()).AddSeconds(-1),
+                        Subject = dr["DEMAND_ID"].ToString(),
+                        Description = dr["PRODUCT"].ToString(),
+                        CalendarId = dr["EQUIPMENT"].ToString(),
+                        Label = cnt1.ToString()
+                    };
+                    vc1 = dr["DEMAND_ID"].ToString();
+                    appointments.Add(ma);
+                }
+                ModelAppointments = appointments;
+            }
+            catch (ArgumentException e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                MessageBox.Show("csv파일을 확인해주세요. \n: " + e.Message,"Error", MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
+        }
+        private string ShowFileOpenDialog()
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Title = "Select CSV File";
+            ofd.Filter = "CSV 파일 (*.csv) | *.csv; | 모든 파일 (*.*) | *.*";
+
+            //파일 오픈창 로드
+            DialogResult dr = ofd.ShowDialog();
+
+            //OK버튼 클릭시
+            if (dr == DialogResult.OK)
+            {
+                string fileFullName = ofd.FileName;
+
+                return fileFullName;
+            }
+            //취소버튼 클릭시 또는 ESC키로 파일창을 종료 했을경우
+            else if (dr == DialogResult.Cancel)
+            {
+                return "";
+            }
+
+            return "";
+        }
+        private void GenSelectedAppointments()
+        {
+            SelectedAppointments = ModelAppointments.Where(x => x.Label == SelectedAppointment.Label );
         }
     }
 }

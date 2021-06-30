@@ -10,6 +10,7 @@ using WpfApp3.Model;
 using DevExpress.Mvvm.UI.Interactivity;
 using DevExpress.Xpf.Diagram.Themes;
 
+
 namespace WpfApp3
 {
     /// <summary>
@@ -27,22 +28,45 @@ namespace WpfApp3
 
         }
 
-        private void scheduler_CompleteAppointmentDragDrop(object sender, DevExpress.Xpf.Scheduling.CompleteAppointmentDragDropEventArgs e)
-        {
-            Console.WriteLine(e);
-        }
-
         private void scheduler_DropAppointment(object sender, DevExpress.Xpf.Scheduling.DropAppointmentEventArgs e)
         {
-            Console.WriteLine(e);
-            System.Collections.Generic.IReadOnlyList<DevExpress.Xpf.Scheduling.AppointmentItem> aaa = e.DragAppointments;
-            // DevExpress.Xpf.Scheduling.SchedulerControl bbb = e.OriginalSource;
-            object res = aaa[0].ResourceId;
-            Console.WriteLine(res);
-            return;
-        }
-    }
-    
+            DevExpress.Xpf.Scheduling.SchedulerControl scc = (DevExpress.Xpf.Scheduling.SchedulerControl)e.Source;
+            
 
+            string res1 = (string)e.DragAppointments[0].ResourceId;
+            string res2 = (string)scc.SelectedAppointments[0].ResourceId;
+
+            if (res1.Substring(0,5) == res2.Substring(0,5))
+            {
+                Console.WriteLine(res1, res2);
+            }
+            else
+            {
+                e.Cancel = true;
+                // 원래 Resource로 돌려놔야함.
+                scheduler.SelectedAppointments[0].ResourceId = res2;
+                Console.WriteLine(res1 + res2);
+            }
+
+        }
+        private void scheduler_DragAppointmentOver(object sender, DevExpress.Xpf.Scheduling.DragAppointmentOverEventArgs e)
+        {
+            if (e.DragAppointments.Count > 1)
+            {
+                scheduler.AllowAppointmentDragBetweenResources = false;
+            }
+            else
+            {
+                scheduler.AllowAppointmentDragBetweenResources = true;
+            }
+        }
+        #region #About_ItemClick
+        void About_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            DXMessageBox.Show(@"This example demonstrates how to customize the WPF Scheduler's integrated ribbon UI. Use the Scheduler's RibbonActions collection to create, remove or modify ribbon elements.",
+                "Scheduler Ribbon Example", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        #endregion #About_ItemClick
+    }
 
 }

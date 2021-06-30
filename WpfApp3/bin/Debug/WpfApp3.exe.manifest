@@ -3474,14 +3474,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WpfApp3.exe" size="68056">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WpfApp3.exe" size="74200">
       <assemblyIdentity name="WpfApp3" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>Wpr1iKq7eqpYc4Bt/Z9YfC0qliXct/385e9fwiWeZ6Q=</dsig:DigestValue>
+        <dsig:DigestValue>yk/+qolrQ67uc0w2DyQrDKcQtxFEFLYnzKKiQwtQAZo=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

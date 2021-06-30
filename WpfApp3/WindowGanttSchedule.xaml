@@ -13,6 +13,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
     xmlns:dxschg="http://schemas.devexpress.com/winfx/2008/xaml/scheduling"
+    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+    xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
+    
     
     xmlns:local="clr-namespace:WpfApp3"
     xmlns:mv="clr-namespace:WpfApp3"
@@ -59,6 +62,20 @@
                     Content="Month"
                     FontWeight="{DXBinding '@e(timelineViewMonth).IsActive ? $FontWeights.Bold : $FontWeights.Normal'}"
                     Click="{DXEvent '@e(timelineViewMonth).IsActive = true'}"/>
+                <Button Name="csvCon" Content="CSV" HorizontalAlignment="Right" Margin="1 1 5 1">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <i:InvokeCommandAction Command="{Binding ConnectCsvCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+                <Button Name="dbCon" Content="DB" HorizontalAlignment="Right" Margin="5 1 1 1">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <i:InvokeCommandAction Command="{Binding ConnectDataBaseCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
             </StackPanel>
             <TextBlock Text="Date" MaxHeight="30" Width="35" RenderTransformOrigin="0.5,0.667" TextAlignment="Center" Padding="5" Margin="5">
                 <TextBlock.Style>
@@ -103,7 +120,11 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <dxsch:DateNavigationPanel Scheduler="{Binding ElementName=scheduler}"/>
+            <dxsch:DateNavigationPanel Scheduler="{Binding ElementName=scheduler}">
+                <i:Interaction.Triggers>
+                    
+                </i:Interaction.Triggers>
+            </dxsch:DateNavigationPanel>
         </DockPanel>
         <dxsch:SchedulerControl
             x:Name="scheduler"
@@ -114,7 +135,19 @@
             AllowAppointmentConflicts="True"
             ShowDateNavigationPanel="False"
             CommandBarStyle="Ribbon"
-            ActiveViewIndex="0" KeepResourceDistanceOnAppointmentDrag="True" CompleteAppointmentDragDrop="scheduler_CompleteAppointmentDragDrop" DropAppointment="scheduler_DropAppointment">
+            ActiveViewIndex="0" KeepResourceDistanceOnAppointmentDrag="True" DropAppointment="scheduler_DropAppointment"
+            DragAppointmentOver="scheduler_DragAppointmentOver" SelectedAppointmentsSource="{Binding SelectedAppointments,Mode=TwoWay}">
+
+            <dxsch:SchedulerControl.RibbonActions>
+                <dxb:InsertAction ContainerName="{x:Static dxsch:DefaultBarItemNames.Pages_Home}" Index="10">
+                    <dxr:RibbonPageGroup Caption="Select all">
+                        <dxb:BarButtonItem    Content="Select all the same LOTs"
+                                              ItemClick="About_ItemClick"
+                                              LargeGlyph="{dx:DXImageOffice2013 Image=Apply_32x32.png}"/>
+                    </dxr:RibbonPageGroup>
+                </dxb:InsertAction>
+            </dxsch:SchedulerControl.RibbonActions>
+            
             <dxsch:TimelineView x:Name="timelineView" ViewMode="Standard" Style="{StaticResource timelineView.Style}" IntervalDuration="1825" IsActive="True" ResourceMinHeight="30" ResourceAutoHeight="True" AppointmentMinHeight="20" AppointmentMinWidth="10" 
                                 ResourceWidth="135">
                 <dxsch:TimelineView.TimeScales>
@@ -135,8 +168,8 @@
                 </dxsch:TimelineView.TimeScales>
             </dxsch:TimelineView>
             <dxsch:TimelineView
-                x:Name="timelineViewWeek" ViewMode="Standard" Style="{StaticResource timelineView.Style}"
-                AppointmentMinWidth="1000" Zoom="00:10:00" ZoomRange="00:00:45-00:00:00">
+                x:Name="timelineViewWeek" ViewMode="Standard" IntervalDuration="7"  Style="{StaticResource timelineView.Style}"
+                AppointmentMinWidth="10" Zoom="00:10:00" ZoomRange="00:00:45-00:00:00">
                 <dxsch:TimelineView.TimeScales>
                     <dxsch:TimeScale ScaleUnit="Day" MinWidth="0"/>
                     <dxsch:TimeScale ScaleUnit="Hour" UnitCount="12" ShowHeaders="False" MinWidth="100"/>
@@ -147,8 +180,8 @@
                 </dxsch:TimelineView.TimeScales>
             </dxsch:TimelineView>
             <dxsch:TimelineView
-                x:Name="timelineViewMonth" ViewMode="Standard" Style="{StaticResource timelineView.Style}"
-                AppointmentMinWidth="1000" Zoom="00:15:00" ZoomRange="00:05:00-00:00:00">
+                x:Name="timelineViewMonth" ViewMode="Standard" IntervalDuration="31" Style="{StaticResource timelineView.Style}"
+                AppointmentMinWidth="10" Zoom="00:15:00" ZoomRange="00:05:00-00:00:00">
                 <dxsch:TimelineView.TimeScales>
                     <dxsch:TimeScale ScaleUnit="Week" MinWidth="0"/>
                     <dxsch:TimeScale ScaleUnit="Day" MinWidth="0"/>
