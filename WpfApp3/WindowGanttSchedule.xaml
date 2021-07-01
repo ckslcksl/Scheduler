@@ -143,11 +143,12 @@
                     <dxr:RibbonPageGroup Caption="Select all">
                         <dxb:BarButtonItem    Content="Select all the same LOTs"
                                               ItemClick="About_ItemClick"
+                                              Command="{Binding SelectSameLotsCommand}" CommandParameter="{Binding ElementName=scheduler,Path=SelectedAppointments}"
                                               LargeGlyph="{dx:DXImageOffice2013 Image=Apply_32x32.png}"/>
                     </dxr:RibbonPageGroup>
                 </dxb:InsertAction>
             </dxsch:SchedulerControl.RibbonActions>
-            
+
             <dxsch:TimelineView x:Name="timelineView" ViewMode="Standard" Style="{StaticResource timelineView.Style}" IntervalDuration="1825" IsActive="True" ResourceMinHeight="30" ResourceAutoHeight="True" AppointmentMinHeight="20" AppointmentMinWidth="10" 
                                 ResourceWidth="135">
                 <dxsch:TimelineView.TimeScales>

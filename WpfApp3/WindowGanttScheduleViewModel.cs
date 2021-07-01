@@ -26,6 +26,7 @@ namespace WpfApp3
         public DelegateCommand ChangeVersionDateCommand { get; private set; }
         public DelegateCommand ChangeVersionModelsCommand { get; private set; }
         public DelegateCommand SelectSameLotsCommand { get; private set; }
+        public DelegateCommand SelectLotsCommand { get; private set; }
 
         public virtual DateTime Start { get; set; }
         ///public IEnumerable<WorkCalendar> Calendars { get { return WorkData.Calendars; } }
@@ -103,6 +104,10 @@ namespace WpfApp3
         {
             GenSelectedAppointments();
         }
+        void SelectLotsExecute(object parameter)
+        {
+            SetSelectedAppointments();
+        }
         public WindowGanttScheduleViewModel()
         {           
             Start = DateTime.Today.Date;
@@ -111,6 +116,7 @@ namespace WpfApp3
             ChangeVersionDateCommand = new DelegateCommand(ChangeVersionDateExecute);
             ChangeVersionModelsCommand = new DelegateCommand(ChangeVersionModelsExecute);
             SelectSameLotsCommand = new DelegateCommand(SelectSameLotsExecute);
+            SelectLotsCommand = new DelegateCommand(()=> SelectLotsExecute(Parameter));
 
         }
         private void GenVersionDates()
@@ -415,7 +421,24 @@ namespace WpfApp3
         }
         private void GenSelectedAppointments()
         {
-            SelectedAppointments = ModelAppointments.Where(x => x.Label == SelectedAppointment.Label );
+            try
+            {
+                SelectedAppointments = ModelAppointments.Where(x => x.Label == SelectedAppointment.Label);
+            }
+            catch (ArgumentNullException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            Console.WriteLine("gen");
+        }
+        private void SetSelectedAppointments()
+        {
+            Console.WriteLine("e");
+        }
+        protected override void OnParameterChanged(object parameter)
+        {
+            base.OnParameterChanged(parameter);
+            
         }
     }
 }

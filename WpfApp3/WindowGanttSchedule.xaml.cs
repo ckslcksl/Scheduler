@@ -10,6 +10,9 @@ using WpfApp3.Model;
 using DevExpress.Mvvm.UI.Interactivity;
 using DevExpress.Xpf.Diagram.Themes;
 
+using DevExpress.Xpf.Scheduler;
+using DevExpress.XtraScheduler;
+
 
 namespace WpfApp3
 {
@@ -38,14 +41,11 @@ namespace WpfApp3
 
             if (res1.Substring(0,5) == res2.Substring(0,5))
             {
-                Console.WriteLine(res1, res2);
+                e.Cancel = false;
             }
             else
             {
                 e.Cancel = true;
-                // 원래 Resource로 돌려놔야함.
-                scheduler.SelectedAppointments[0].ResourceId = res2;
-                Console.WriteLine(res1 + res2);
             }
 
         }
