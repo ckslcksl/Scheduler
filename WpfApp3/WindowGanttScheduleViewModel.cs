@@ -15,7 +15,7 @@ namespace WpfApp3
 {
     class WindowGanttScheduleViewModel : ViewModelBase
     {
-        static string connectionString = @"Server=165.243.45.197,1433; Database=lscnssm; uid=hscmuser; pwd=hscm!q2w3e4r;";
+        static string connectionString = @";";
         SqlConnection con;
         SqlCommand cmd;
         SqlDataAdapter adapter;
